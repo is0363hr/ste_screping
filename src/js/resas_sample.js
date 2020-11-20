@@ -1,7 +1,5 @@
 const fetch = require('node-fetch');
-
-
-var config = require('../../config/resas_config.json')
+const config = require('../../config/resas_config.json')
 // console.log(config);
 
 
