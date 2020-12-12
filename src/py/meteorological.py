@@ -1,7 +1,11 @@
+# -*- coding: utf-8 -*-
+
 import requests
-from bs4 import BeautifulSoup #ダウンロードしてなかったらpipでできるからやってね。
+from bs4 import BeautifulSoup
 import csv
 import json
+import time
+import sys
 
 
 #取ったデータをfloat型に変えるやつ。(データが取れなかったとき気象庁は"/"を埋め込んでいるから0に変える)
@@ -12,6 +16,12 @@ def str2float(str):
         return 0.0
 
 
+def save_html(html_, name):
+    # prettifyで整形されたファイルで保存
+    with open(name, mode = 'w', encoding = 'utf-8') as fw:
+        fw.write(html_.prettify())
+
+
 class Meteorological:
     def __init__(self, year, place):
         self.year = year
@@ -20,6 +30,7 @@ class Meteorological:
         self.now_rain_url = ''
         self.place_codeA = 0
         self.place_codeB = 0
+        self.start = 0
 
 
     def get_config(self):
@@ -56,7 +67,7 @@ class Meteorological:
             r.encoding = r.apparent_encoding
 
             # 対象である表をスクレイピング。
-            soup = BeautifulSoup(r.text)
+            soup = BeautifulSoup(r.text, 'html.parser')
             rows = soup.findAll('tr',class_='mtx') #タグ指定してclass名を指定するみたい。
 
             # 表の最初の1~4行目はカラム情報なのでスライスする。(indexだから初めは0だよ)
@@ -81,8 +92,8 @@ class Meteorological:
 
                 #次の行にデータを追加
                 all_list.append(rowData)
-
-        self.csv_out(all_list)
+                # self.csv_out(all_list)
+                self.save_html(soup, str(month) + '.html')
 
         print('end')
 
@@ -92,19 +103,20 @@ class Meteorological:
         # 保留
         self.get_config()
         now_list = [['都道府県', '市町村', '地点', '現在値(mm)']]
-        r = requests.get(self.now_rain_url + str(self.place_codeA))
+        # r = requests.get(self.now_rain_url + str(self.place_codeA))
+        r = requests.get(self.now_rain_url)
         r.encoding = r.apparent_encoding
 
         # 対象である表をスクレイピング。
-        soup = BeautifulSoup(r.text)
-        rows = soup.findAll('tr',class_='mtx') #タグ指定してclass名を指定するみたい。
+        soup = BeautifulSoup(r.text, 'html.parser')
+        # rows = soup.findAll('tr',class_='mtx') #タグ指定してclass名を指定するみたい。
 
-        rows = rows[4:]
-        print(rows)
+        # rows = rows[4:]
+        # print(rows)
         # # 1日〜最終日までの１行を網羅し、取得します。
-        for row in rows:
-            data = row.findAll('td')
-            print(data)
+        # for row in rows:
+        #     data = row.findAll('td')
+        #     print(data)
 
         #     #１行の中には様々なデータがあるので全部取り出す。
         #     # ★ポイント
@@ -115,7 +127,8 @@ class Meteorological:
         #     rowData.append(str2float(data[3].string))
 
         # print(now_list)
-        print('end')
+        print('scraping_end')
+        print('memory_size:{}byte'.format(sys.getsizeof(soup)))
 
 
     def past_rain(self):
@@ -132,7 +145,19 @@ class Meteorological:
         print(rows)
 
 
+    def time_set(self):
+        self.start = time.time()
+        print("start_time:{:.3f}".format(self.start) + "[sec]")
+
+
+    def time_get(self):
+        elapsed_time = time.time() - self.start
+        print("elapsed_time:{:.3f}".format(elapsed_time) + "[sec]")
+        return elapsed_time
+
+
 if __name__ == "__main__":
     m = Meteorological(2019, '高知')
-    # m.all_data()
-    m.past_rain()
+    # m.time_set()
+    m.all_data()
+    # m.time_get()
