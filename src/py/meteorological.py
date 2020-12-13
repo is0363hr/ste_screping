@@ -70,8 +70,7 @@ class Meteorological:
             soup = BeautifulSoup(r.text, 'html.parser')
             rows = soup.findAll('tr',class_='mtx') #タグ指定してclass名を指定するみたい。
 
-            # 表の最初の1~4行目はカラム情報なのでスライスする。(indexだから初めは0だよ)
-            # 【追記】2020/3/11 申し訳ございません。間違えてました。
+            # 表の最初の1~4行目はカラム情報なのでスライスする。(indexだから初めは0だよ)　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　   # 【追記】2020/3/11 申し訳ございません。間違えてました。
             rows = rows[4:]
 
             # 1日〜最終日までの１行を網羅し、取得します。
