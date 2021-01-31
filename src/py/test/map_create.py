@@ -6,11 +6,45 @@ from PIL import Image
 
 
 # 縦結合
-def img_v(input_path, output_path):
+def map_img_v(input_path, output_path):
     flag = True
 
-    for i in range(26, 36):
-        for j in range(26, 34):
+    for i in range(6, 10):
+        for j in range(6, 10):
+            file = input_path + str(i) + '_' + str(j) + '.png'
+            if flag:
+                im = cv2.imread(file)
+                flag = False
+            else:
+                tmp = cv2.imread(file)
+                im = cv2.vconcat([im, tmp])
+
+        cv2.imwrite(output_path + str(i) + '.png', im)
+        flag = True
+
+
+# 横結合
+def map_img_h(input_path, output_path):
+    flag = True
+    for i in range(6, 10):
+        file = input_path + str(i) + '.png'
+        if flag:
+            im = cv2.imread(file)
+            flag = False
+        else:
+            tmp = cv2.imread(file)
+            im = cv2.hconcat([im, tmp])
+
+    cv2.imwrite(output_path + 'map_zoom4.png', im)
+
+
+
+# 縦結合
+def cloud_img_v(input_path, output_path):
+    flag = True
+
+    for i in range(6, 10):
+        for j in range(6, 10):
             file = input_path + str(i) + '_' + str(j) + '.png'
             if flag:
                 im = cv2.imread(file, -1)
@@ -24,9 +58,9 @@ def img_v(input_path, output_path):
 
 
 # 横結合
-def img_h(input_path, output_path):
+def cloud_img_h(input_path, output_path):
     flag = True
-    for i in range(26, 36):
+    for i in range(6, 10):
         file = input_path + str(i) + '.png'
         if flag:
             im = cv2.imread(file, -1)
@@ -54,9 +88,11 @@ def sye(output_path):
 
 
 def main():
-    sye('result/')
+    # sye('result/')
     # img_v('cloud_img/zoom5/', 'result/')
     # img_h('result/', 'result/')
+    map_img_v('map_img/zoom4/', 'result/')
+    map_img_h('result/', 'result/')
 
 
 if __name__=='__main__':
