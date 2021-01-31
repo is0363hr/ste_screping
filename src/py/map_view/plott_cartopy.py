@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 
+# 地図表示、１時間ごとに観測値をplot
+
 import csv
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
 
 import math
 from decimal import Decimal, ROUND_HALF_UP
@@ -28,10 +33,6 @@ def loaddata(place):
 
 
 def plot_(place, lat, lon):
-    import matplotlib.pyplot as plt
-    import cartopy.crs as ccrs
-    import cartopy.feature as cfeature
-    import numpy as np
 
     fig = plt.figure(figsize=(5,5))
     plt.rcParams["font.size"] = 18
