@@ -2,9 +2,11 @@ import googlemaps
 import requests
 
 MY_API_KEY = "AIzaSyCk5ikq69h3QyDNmubBqudKFhrgzmF0_PI"
-URL_FORMAT = "https://maps.googleapis.com/maps/api/staticmap?center={}"\
-    "&zoom={}&size={}&format={}{}&maptype=roadmap"\
+URL_FORMAT = (
+    "https://maps.googleapis.com/maps/api/staticmap?center={}"
+    "&zoom={}&size={}&format={}{}&maptype=roadmap"
     "&key={}"
+)
 
 
 def dl_image(filename, img_format, url):
@@ -25,13 +27,14 @@ def make_url(lat, lng, zoom, size, img_format, custom_icon):
     else:
         icon_param = "&markers=icon:{}|{}".format(custom_icon, location)
     url = URL_FORMAT.format(
-        location, zoom, size_param, img_format, icon_param, MY_API_KEY)
+        location, zoom, size_param, img_format, icon_param, MY_API_KEY
+    )
     return url
 
 
 def get_map_image(
-        place, zoom, size=(600, 600), img_format="png",
-        custom_icon=None, filename=None):
+    place, zoom, size=(640, 500), img_format="png", custom_icon=None, filename=None
+):
     """
     place : 場所\n
     zoom  : 1)世界 5)大陸 10)市 15)通り 20)建物\n
@@ -48,8 +51,8 @@ def get_map_image(
 
     # lat = geocode_result[0]["geometry"]["location"]["lat"]
     # lng = geocode_result[0]["geometry"]["location"]["lng"]
-    lat = 33.719770
-    lng = 133.525085
+    lat = 34.0000
+    lng = 135.0000
     url = make_url(lat, lng, zoom, size, img_format, custom_icon)
     if filename is None:
         filename = place
@@ -57,5 +60,4 @@ def get_map_image(
 
 
 if __name__ == "__main__":
-    get_map_image(
-        "高知", 7, filename="kochi")
+    get_map_image("高知", 7, filename="kochi")
