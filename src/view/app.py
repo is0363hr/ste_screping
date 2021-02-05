@@ -4,10 +4,19 @@ from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 
+import os
+import sys
+
+# 実行ディレクトリを上げる
+sys.path.append("../")
+
+from modules import meteorological_img
+
 
 # define the job
-def hello_job():
-    print("Hello Job! The time is: %s" % datetime.now())
+def map_update_job():
+    # print("Hello Job! The time is: %s" % datetime.now())
+    meteorological_img.main()
 
 
 def create_app():
@@ -16,7 +25,8 @@ def create_app():
     # init BackgroundScheduler job
     scheduler = BackgroundScheduler()
     # in your case you could change seconds to hours
-    scheduler.add_job(hello_job, trigger="interval", seconds=3)
+    # TODO
+    scheduler.add_job(map_update_job, trigger="interval", seconds=10)
     scheduler.start()
 
     try:

@@ -37,11 +37,15 @@ class meteorogical_img:
             tem = 0
             for h in hour:
                 tem += int(h)
-                time[-4:-2] = "0" + str(tem)
+                if tem < 10:
+                    time[-4:-2] = "0" + str(tem)
+                else:
+                    time[-4:-2] = str(tem)
             if m > 0:
                 time[-1] = "0"
 
             time = "".join(time)
+            print(time)
             # time = "202101060955"
 
             for i in range(1, 3):
@@ -133,12 +137,16 @@ class meteorogical_img:
         cv2.imwrite(path + "result.png", im)
 
     # 透過画像の合成
-    def sye(self):
-        map_path = self.base_path + "map/" + self.zoom + "/result.png"
+    def sye(self, cartopy=False):
+        if cartopy:
+            map = "cartopy/"
+        else:
+            map = "map/"
+        map_path = self.base_path + map + self.zoom + "/result.png"
         cloud_path = self.base_path + "cloud/" + self.zoom + "/result.png"
         map = cv2.imread(map_path)
         # height, width = map.shape[0], map.shape[1]
-        # map = cv2.resize(map, (int(width * 2.0), int(height * 2.0)))
+        map = cv2.resize(map, (512, 512))
         cloud = cv2.imread(cloud_path, -1)
         # 貼り付け先座標の設定。とりあえず左上に
         x1, y1, x2, y2 = 0, 0, cloud.shape[1], cloud.shape[0]
@@ -150,20 +158,28 @@ class meteorogical_img:
         cv2.imwrite(output_path, map)
         return output_path
 
-    # 透過画像の合成
-    def py_sye(output_path):
-        map = cv2.imread("result/mini/py_mini_zoom2.png")
-        map = cv2.resize(map, (512, 512))
-        # height, width = map.shape[0], map.shape[1]
-        # map = cv2.resize(map, (int(width * 2.0), int(height * 2.0)))
-        cloud = cv2.imread("result/mini/cloud_mini_zoom2.png", -1)
-        # 貼り付け先座標の設定。とりあえず左上に
-        x1, y1, x2, y2 = 0, 0, cloud.shape[1], cloud.shape[0]
+    def cartopy_img_create(self):
+        import matplotlib.pyplot as plt
+        import cartopy.crs as ccrs
+        import cartopy.feature as cfeature
 
-        map[y1:y2, x1:x2] = map[y1:y2, x1:x2] * (1 - cloud[:, :, 3:] / 255) + cloud[
-            :, :, :3
-        ] * (cloud[:, :, 3:] / 255)
-        cv2.imwrite(output_path + "py_synthe_mini_zoom2.png", map)
+        fig = plt.figure()
+
+        ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
+        ax.set_extent([119.3229, 150.6771, 20.5, 47.5], crs=ccrs.PlateCarree())
+
+        ax.coastlines(resolution="10m")  # 海岸線の解像度を10 mにする
+        ax.add_feature(cfeature.BORDERS, linestyle=":")
+        ax.stock_img()  # 地図の色を塗る
+
+        output_path = self.base_path + "cartopy/" + self.zoom + "/result.png"
+        fig.savefig(
+            output_path,
+            dpi=300,
+            transparent=True,
+            bbox_inches="tight",
+            pad_inches=0,
+        )
 
     def map_create(self):
         self.tag = "map"
@@ -182,8 +198,13 @@ class meteorogical_img:
         pass
 
 
-if __name__ == "__main__":
+def main():
     mete = meteorogical_img("../assets/", "zoom2")
-    mete.map_create()
+    # mete.map_create()
+    mete.cartopy_img_create()
     mete.cloud_create()
-    mete.sye()
+    mete.sye(cartopy=True)
+
+
+if __name__ == "__main__":
+    main()
