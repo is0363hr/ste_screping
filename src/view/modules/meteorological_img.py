@@ -10,9 +10,27 @@ class meteorogical_img:
         self.tag = ""
         self.zoom = zoom
         self.output_path = ""
+        self.get_time = ""
         pass
 
     def get_image(self):
+        time = list(datetime.now().strftime("%Y%m%d%H%M"))
+        hour = time[-4:-2]
+        m = int(time[-1])
+        tem = 0
+        for h in hour:
+            tem += int(h)
+            if tem < 10:
+                time[-4:-2] = "0" + str(tem)
+            else:
+                time[-4:-2] = str(tem)
+        if m > 0:
+            time[-1] = "0"
+
+        time = "".join(time)
+        print(time)
+        # time = "202101060955"
+
         self.output_path = self.base_path + self.tag + "/" + self.zoom + "/"
         if self.tag == "map":
             for i in range(1, 3):
@@ -30,23 +48,6 @@ class meteorogical_img:
                     self.save_img(url, num)
 
         elif self.tag == "cloud":
-
-            time = list(datetime.now().strftime("%Y%m%d%H%M"))
-            hour = time[-4:-2]
-            m = int(time[-1])
-            tem = 0
-            for h in hour:
-                tem += int(h)
-                if tem < 10:
-                    time[-4:-2] = "0" + str(tem)
-                else:
-                    time[-4:-2] = str(tem)
-            if m > 0:
-                time[-1] = "0"
-
-            time = "".join(time)
-            print(time)
-            # time = "202101060955"
 
             for i in range(1, 3):
                 for j in range(1, 3):
@@ -67,6 +68,8 @@ class meteorogical_img:
                     self.save_img(url, num)
         else:
             print("error")
+
+        self.get_time = time
 
     def save_img(self, url, num):
         req = requests.get(url)
@@ -154,7 +157,7 @@ class meteorogical_img:
         map[y1:y2, x1:x2] = map[y1:y2, x1:x2] * (1 - cloud[:, :, 3:] / 255) + cloud[
             :, :, :3
         ] * (cloud[:, :, 3:] / 255)
-        output_path = self.base_path + "sye/" + self.zoom + "/result.png"
+        output_path = self.base_path + "sye/" + self.zoom + "/" + self.get_time + ".png"
         cv2.imwrite(output_path, map)
         return output_path
 
@@ -199,11 +202,12 @@ class meteorogical_img:
 
 
 def main():
-    mete = meteorogical_img("../assets/", "zoom2")
+    mete = meteorogical_img("./static/", "zoom2")
     # mete.map_create()
-    # mete.cartopy_img_create()
+    mete.cartopy_img_create()
     mete.cloud_create()
-    mete.sye(cartopy=True)
+    path = mete.sye(cartopy=True)
+    return path
 
 
 if __name__ == "__main__":

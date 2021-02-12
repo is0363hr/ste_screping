@@ -2,6 +2,7 @@ from application import app, db, manager
 from flask_script import Server, Command
 from www import *
 
+
 # web server
 manager.add_command(
     "runserver", Server(host="0.0.0.0", use_debugger=True, use_reloader=True)
