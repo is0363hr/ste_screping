@@ -9,7 +9,9 @@ import os
 # sys.path.append("../")
 from modules import meteorological_img
 from common.models.cloud import Cloud
-from application import db
+
+# セッション変数の取得
+from application import session
 
 
 class Map_update:
@@ -18,7 +20,6 @@ class Map_update:
         pass
 
     def sche_set(self, set_time):
-        # self.scheduler.add_job(self.insert_img, "interval", minutes=set_time)
         self.scheduler.add_job(self.insert_img, "interval", seconds=set_time)
 
     def sche_start(self):
@@ -48,8 +49,8 @@ class Map_update:
         cloud.created_at = now
         cloud.tag = "synthetic"
         cloud.zoom_level = 2
-        db.session.add(cloud)
-        db.session.commit()
+        session.add(cloud)
+        session.commit()
         print("insert")
 
 

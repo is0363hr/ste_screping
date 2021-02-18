@@ -1,4 +1,4 @@
-from application import app, db, manager
+from application import app, Base, ENGINE, manager
 from flask_script import Server, Command
 from www import *
 
@@ -13,7 +13,7 @@ manager.add_command(
 def create_all():
     from common.models.cloud import Cloud
 
-    db.create_all()
+    Base.metadata.create_all(bind=ENGINE)
 
 
 manager.add_command("create_all", create_all)
