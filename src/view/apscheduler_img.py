@@ -41,16 +41,17 @@ class Map_update:
 
     def insert_img(self):
         path = meteorological_img.main()
-        image_file = self.img_io(path)
+        # image_file = self.img_io(path)
         now = datetime.now()
         cloud = Cloud()
         cloud.img_name = os.path.basename(path)
-        cloud.img = image_file
+        cloud.img_path = path
         cloud.created_at = now
         cloud.tag = "synthetic"
         cloud.zoom_level = 2
         session.add(cloud)
         session.commit()
+        print(path)
         print("insert")
 
 

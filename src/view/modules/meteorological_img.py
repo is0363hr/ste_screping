@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 import cv2
 import numpy as np
 
@@ -14,7 +14,8 @@ class meteorogical_img:
         pass
 
     def get_image(self):
-        time = list(datetime.now().strftime("%Y%m%d%H%M"))
+        now = datetime.now() - timedelta(minutes=5)
+        time = list(now.strftime("%Y%m%d%H%M"))
         hour = time[-4:-2]
         m = int(time[-1])
         tem = 0
@@ -24,8 +25,10 @@ class meteorogical_img:
                 time[-4:-2] = "0" + str(tem)
             else:
                 time[-4:-2] = str(tem)
-        if m > 0:
+        if m < 5:
             time[-1] = "0"
+        elif m > 5:
+            time[-1] = "5"
 
         time = "".join(time)
         print(time)

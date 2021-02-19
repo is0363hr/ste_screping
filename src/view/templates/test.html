@@ -1,9 +1,44 @@
-<!doctype html>
-<html>
-  <head>
-    <title>アメダス</title>
-  </head>
-  <body>
-    <img src='../static/sye/zoom2/result.png'>
-  </body>
-</html>
+{% extends "common/layout.html" %}
+{% block content %}
+
+<div id="base" style="min-width:1000px">
+  <div id="main">
+    <table cellpadding="0px" cellspacing="0px" border="0px" >
+      <tr>
+        <td>
+          <div id="title">
+            <table style="width: 100%;">
+              <tr>
+                <td style="width: 120px;">
+                  <img src="../static/logo/title_highresorad.png" style="margin: 0.1em;">
+                </td>
+                <td>
+                  <h1>雨雲の動き</h1>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td align="center">
+          <table cellpadding="0px" cellspacing="0px">
+            <tr>
+              <td align="left" style="background-color: rgb(102, 102, 255);">
+                <div style="color: rgb(255, 255, 255); text-shadow: black 0px -1px, black 1px 0px, black 0px 1px, black -1px 0px;">2021年02月19日18時20分</div>
+              </td>
+            </tr>
+            <tr>
+              画像
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+    </table>
+    {{cloud_img_path}}
+    <img src='{{cloud_img_path}}'>
+  </div>
+</div>
+
+{% endblock %}
