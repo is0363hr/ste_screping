@@ -2,11 +2,16 @@ from application import app, Base, ENGINE, manager
 from flask_script import Server, Command
 from www import *
 
+from apscheduler_img import Map_update
 
 # web server
 manager.add_command(
     "runserver", Server(host="0.0.0.0", use_debugger=True, use_reloader=True)
 )
+
+map = Map_update()
+map.sche_set(1)
+map.sche_start()
 
 # create tables
 @Command

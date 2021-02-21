@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy.sql import func
 from pprint import pprint
+from datetime import datetime
 
 from common.models.cloud import Cloud
 from application import session
@@ -17,6 +18,12 @@ class DBFunc:
             session.query(Cloud.img_path).filter(Cloud.id == max_id).scalar()
         )
         return cloud_img_path
+
+    def get_latest_img_time(self):
+        max_id = session.query(func.max(Cloud.id)).scalar()
+        result = session.query(Cloud.img_time).filter(Cloud.id == max_id).scalar()
+        cloud_img_time = result.strftime("%Y年%m月%d日%H時%M分")
+        return cloud_img_time
 
     def get_all(self):
         # Userテーブルのnameカラムをすべて取得
@@ -37,8 +44,8 @@ class DBFunc:
 
 
 def main():
-    db = db_func()
-    pprint(db.get_all())
+    db = DBFunc()
+    pprint(db.get_latest_img_time())
     pass
 
 

@@ -1,4 +1,4 @@
-from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 from io import BytesIO
 from PIL import Image
@@ -16,11 +16,11 @@ from application import session
 
 class Map_update:
     def __init__(self) -> None:
-        self.scheduler = BlockingScheduler()
+        self.scheduler = BackgroundScheduler(standalone=True, coalesce=True)
         pass
 
     def sche_set(self, set_time):
-        self.scheduler.add_job(self.insert_img, "interval", seconds=set_time)
+        self.scheduler.add_job(self.insert_img, "interval", minutes=set_time)
 
     def sche_start(self):
         self.scheduler.start()
@@ -40,12 +40,13 @@ class Map_update:
         return image_file
 
     def insert_img(self):
-        path = meteorological_img.main()
+        path, img_time = meteorological_img.main()
         # image_file = self.img_io(path)
         now = datetime.now()
         cloud = Cloud()
         cloud.img_name = os.path.basename(path)
         cloud.img_path = path
+        cloud.img_time = img_time
         cloud.created_at = now
         cloud.tag = "synthetic"
         cloud.zoom_level = 2

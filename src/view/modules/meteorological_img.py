@@ -11,28 +11,24 @@ class meteorogical_img:
         self.zoom = zoom
         self.output_path = ""
         self.get_time = ""
+        self.img_time = ""
         pass
 
     def get_image(self):
-        now = datetime.now() - timedelta(minutes=5)
-        time = list(now.strftime("%Y%m%d%H%M"))
-        hour = time[-4:-2]
-        m = int(time[-1])
-        tem = 0
-        for h in hour:
-            tem += int(h)
-            if tem < 10:
-                time[-4:-2] = "0" + str(tem)
-            else:
-                time[-4:-2] = str(tem)
-        if m < 5:
-            time[-1] = "0"
-        elif m > 5:
-            time[-1] = "5"
-
+        now = datetime.now()
+        h = sum([int(s) for s in str(now.strftime("%H"))])
+        m = int(now.strftime("%M")[-1])
+        temp_time = datetime.now() - timedelta(minutes=5 + m % 5)
+        time = list(temp_time.strftime("%Y%m%d%H%M"))
+        if h < 10:
+            time[-4:-2] = "0" + str(h)
+        else:
+            time[-4:-2] = str(h)
         time = "".join(time)
         print(time)
         # time = "202101060955"
+        # self.img_time = temp_time.strftime("%Y年%m月%d日%H時%M分")
+        self.img_time = temp_time
 
         self.output_path = self.base_path + self.tag + "/" + self.zoom + "/"
         if self.tag == "map":
@@ -68,6 +64,7 @@ class meteorogical_img:
                         + num
                         + ".png"
                     )
+                    print(url)
                     self.save_img(url, num)
         else:
             print("error")
@@ -162,7 +159,7 @@ class meteorogical_img:
         ] * (cloud[:, :, 3:] / 255)
         output_path = self.base_path + "sye/" + self.zoom + "/" + self.get_time + ".png"
         cv2.imwrite(output_path, map)
-        return output_path
+        return output_path, self.img_time
 
     def cartopy_img_create(self):
         import matplotlib.pyplot as plt
@@ -209,8 +206,8 @@ def main():
     # mete.map_create()
     mete.cartopy_img_create()
     mete.cloud_create()
-    path = mete.sye(cartopy=True)
-    return path
+    path, img_time = mete.sye(cartopy=True)
+    return path, img_time
 
 
 if __name__ == "__main__":
