@@ -10,7 +10,7 @@ manager.add_command(
 )
 
 map = Map_update()
-map.sche_set(1)
+map.sche_set(10)
 map.sche_start()
 
 # create tables

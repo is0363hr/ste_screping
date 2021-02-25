@@ -20,7 +20,7 @@ class Map_update:
         pass
 
     def sche_set(self, set_time):
-        self.scheduler.add_job(self.insert_img, "interval", minutes=set_time)
+        self.scheduler.add_job(self.insert_img, "interval", seconds=set_time)
 
     def sche_start(self):
         self.scheduler.start()
