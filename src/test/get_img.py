@@ -1,3 +1,5 @@
+# 気象庁画像取得（2021/3/11）
+
 import requests
 from datetime import datetime, timedelta
 import os
