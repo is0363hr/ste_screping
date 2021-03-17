@@ -1,7 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
-const { CHANNEL_SECRET } = process.env.CHANNEL_SECRET
-const { CHANNEL_ACCESS_TOKEN } = process.env.CHANNEL_ACCESS_TOKEN
+const { LINE_CHANNEL_ID } = process.env.LINE_CHANNEL_ID
+const { LINE_CHANNEL_SECRET } = process.env.LINE_CHANNEL_SECRET
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -42,17 +42,12 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxtjs/axios',
-    '@line/bot-sdk',
     '@nuxtjs/dotenv',
-    '@nuxtjs/proxy'
   ],
 
-  proxy: {
-    '/api': 'http://localhost:3000'
-  },
-
-  axios: {},
+  serverMiddleware: [
+    { path: "/", handler: "~/server/index.js" },
+  ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -77,7 +72,7 @@ export default {
   build: {
   },
   env: {
-    CHANNEL_SECRET,
-    CHANNEL_ACCESS_TOKEN,
+    LINE_CHANNEL_ID,
+    LINE_CHANNEL_SECRET,
   },
 }
