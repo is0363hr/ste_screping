@@ -1,0 +1,17 @@
+<template>
+  <v-card
+    flat
+    color="transparent"
+  >
+  <v-card-text>
+      <v-slider
+        v-model="fruits"
+        :tick-labels="ticksLabels"
+        :max="3"
+        step="1"
+        ticks="always"
+        tick-size="4"
+      ></v-slider>
+    </v-card-text>
+  </v-card>
+</template>
