@@ -61,10 +61,15 @@ class meteorogical_img:
 
     # 指定したURLの画像を保存
     def save_img(self, url, output_path):
-        req = requests.get(url)
-        with open(output_path, "wb") as w:
-            w.write(req.content)
-            w.close()
+        try:
+            req = requests.get(url)
+            with open(output_path, "wb") as w:
+                w.write(req.content)
+                w.close()
+        except requests.exceptions.HTTPError:
+            print("{}へのアクセス失敗".format(url))
+        except Exception as e:
+            print(e)
 
     # 画像結合
     def img_connect(self, path):

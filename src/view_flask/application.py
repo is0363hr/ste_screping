@@ -8,6 +8,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from config.local_setting import DATABASE_URI
 
 
+
+
+
 app = Flask(__name__)
 
 manager = Manager(app)
