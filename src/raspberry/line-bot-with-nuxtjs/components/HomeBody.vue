@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -52,11 +53,14 @@ export default {
   computed: {
   },
   methods: {
+    ...mapMutations('weather', ['updateZoom']),
     decrement () {
       this.zoom--
+      this.updateZoom(this.zoom)
     },
     increment () {
       this.zoom++
+      this.updateZoom(this.zoom)
     },
     toggle () {
       this.isPlaying = !this.isPlaying

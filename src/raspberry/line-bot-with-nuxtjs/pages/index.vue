@@ -16,11 +16,21 @@
 <script>
 import HomeHeader from '~/components/HomeHeader.vue'
 import HomeBody from '~/components/HomeBody.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
     HomeHeader,
     HomeBody,
+  },
+  computed: {
+    ...mapGetters('weather', ['imgPath']),
+    getImgPath() {
+      this.imgPath({
+        imgPath: this.imgPath,
+      })
+      this.imgPath = null
+    }
   }
 }
 </script>

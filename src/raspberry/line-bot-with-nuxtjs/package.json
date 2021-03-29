@@ -11,6 +11,7 @@
   "dependencies": {
     "@line/bot-sdk": "^7.2.0",
     "@nuxt/typescript-runtime": "^2.0.1",
+    "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/dotenv": "^1.4.1",
     "bluebird": "^3.7.2",
     "core-js": "^3.8.3",
@@ -23,7 +24,8 @@
     "python-shell": "^2.0.3",
     "querystring": "^0.2.1",
     "request": "^2.88.2",
-    "request-promise": "^4.2.6"
+    "request-promise": "^4.2.6",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.12",

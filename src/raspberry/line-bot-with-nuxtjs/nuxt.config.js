@@ -2,6 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 
 const { LINE_CHANNEL_ID } = process.env.LINE_CHANNEL_ID
 const { LINE_CHANNEL_SECRET } = process.env.LINE_CHANNEL_SECRET
+const { BASE_URL } = process.env.BASE_URL
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -44,11 +45,14 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/dotenv',
+    '@nuxtjs/axios',
   ],
 
   serverMiddleware: [
     { path: "/", handler: "~/server/index.js" },
   ],
+
+  axios: {},
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -75,5 +79,6 @@ export default {
   env: {
     LINE_CHANNEL_ID,
     LINE_CHANNEL_SECRET,
+    BASE_URL,
   },
 }

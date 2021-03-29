@@ -87,6 +87,7 @@
 </template>
 
 <script>
+import { mapMutations, mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -111,7 +112,6 @@ export default {
       day: [...Array(31).keys()].map(i => ++i),
       hour: [...Array(24).keys()],
       minute: [...Array(12).keys()].map(i => i++*5),
-
       thumbTimeStr: this.$now().getHours() + ':' + this.$minute(),
     }
   },
@@ -128,13 +128,15 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('weather', ['updateDateTime', 'updateCenterCoordinate']),
+    ...mapActions('weather', ['weatherImg']),
     decrement () {
       this.timeValue--
-      // this.thumbTimeStr = this.$thumbTime(this.yearValue, this.monthValue, this.dayValue, this.hourValue, this.minuteValue, this.timeValue)
+      this.thumbTimeStr = this.$thumbTime(this.yearValue, this.monthValue, this.dayValue, this.hourValue, this.minuteValue, this.timeValue)
     },
     increment () {
       this.timeValue++
-      // this.thumbTimeStr = this.$thumbTime(this.yearValue, this.monthValue, this.dayValue, this.hourValue, this.minuteValue, this.timeValue)
+      this.thumbTimeStr = this.$thumbTime(this.yearValue, this.monthValue, this.dayValue, this.hourValue, this.minuteValue, this.timeValue)
     },
     toggle () {
       this.isPlaying = !this.isPlaying
@@ -145,6 +147,13 @@ export default {
     inputSelectTime (){
       this.timeValue = 0
       this.thumbTimeStr = this.$thumbTime(this.yearValue, this.monthValue, this.dayValue, this.hourValue, this.minuteValue, this.timeValue)
+      this.updateDateTime({
+        imgYear: this.yearValue,
+        imgMonth: this.monthValue,
+        imgDay: this.dayValue,
+        imgHour: this.hourValue,
+        imgMinute: this.minuteValue,
+      })
     },
   },
 }
