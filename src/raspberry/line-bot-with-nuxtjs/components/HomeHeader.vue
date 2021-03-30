@@ -147,12 +147,14 @@ export default {
     inputSelectTime (){
       this.timeValue = 0
       this.thumbTimeStr = this.$thumbTime(this.yearValue, this.monthValue, this.dayValue, this.hourValue, this.minuteValue, this.timeValue)
-      this.updateDateTime({
+      this.weatherImg({
         imgYear: this.yearValue,
         imgMonth: this.monthValue,
         imgDay: this.dayValue,
         imgHour: this.hourValue,
         imgMinute: this.minuteValue,
+        lon: 135.00,
+        lat: 34.00
       })
     },
   },
