@@ -94,13 +94,13 @@ export default {
       timeValue: 0,
       interval: null,
       isPlaying: false,
-      ticksLabels: {
-          '0': '-3時間',
-          '12': '-2時間',
-          '24': '-1時間',
-          '36': '設定時間',
-          '47': '+1時間',
-      },
+      ticksLabels: [
+          '-3時間',,,,,,,,,,,,
+          '-2時間',,,,,,,,,,,,
+          '-1時間',,,,,,,,,,,,
+          '設定時間',,,,,,,,,,,,
+          '+1時間',,,,,,,,,,,,
+      ],
 
       yearValue: this.$now().getFullYear(),
       monthValue: this.$now().getMonth()+1,

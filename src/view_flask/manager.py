@@ -2,7 +2,7 @@ from application import app, Base, ENGINE, manager
 from flask_script import Server, Command
 from www import *
 
-from apscheduler_img import Map_update
+from apscheduler_img import python
 
 # web server
 manager.add_command(

@@ -1,5 +1,6 @@
 // export const namespaced = true
 import axios from '~/middleware/axios-weather-create'
+// import axios from 'axios'
 
 export const state = () => ({
   imgYear: new Date().getFullYear(),
@@ -35,19 +36,20 @@ export const mutations = {
 
 export const actions = {
   weatherImg({ commit }, requestData) {
-    commit('updateDateTime', requestData),
+    // commit('updateDateTime', requestData),
     axios
       .get(
-        `/api/weather`,
+        `/weather`,
         {
-          imgYear: requestData.imgYear,
-          imgMonth: requestData.imgMonth,
-          imgDay: requestData.imgDay,
-          imgHour: requestData.imgHour,
-          lon: requestData.lon,
-          lat: requestData.lat,
-        }
-      )
+          params: {
+            imgYear: requestData.imgYear,
+            imgMonth: requestData.imgMonth,
+            imgDay: requestData.imgDay,
+            imgHour: requestData.imgHour,
+            lon: requestData.lon,
+            lat: requestData.lat,
+          }
+        })
       .then((response) => {
         commit('updateImagePath', response.data.imgPath)
         console.log(response)

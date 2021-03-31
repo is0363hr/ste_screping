@@ -3,6 +3,7 @@ import colors from 'vuetify/es5/util/colors'
 const { LINE_CHANNEL_ID } = process.env.LINE_CHANNEL_ID
 const { LINE_CHANNEL_SECRET } = process.env.LINE_CHANNEL_SECRET
 const { BASE_URL } = process.env.BASE_URL
+const { LOCAL_URL } = process.env.LOCAL_URL
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -46,13 +47,25 @@ export default {
   modules: [
     '@nuxtjs/dotenv',
     '@nuxtjs/axios',
+    '@nuxtjs/proxy',
   ],
 
   serverMiddleware: [
     { path: "/", handler: "~/server/index.js" },
   ],
 
-  axios: {},
+  axios: {
+    proxy: true
+  },
+
+  proxy: {
+    '/api/': {
+        target: `${process.env.BASE_URL}/api`,
+        pathRewrite: {
+            '^/api': '/'
+        }
+    }
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -73,6 +86,8 @@ export default {
     }
   },
 
+  mode: "universal",
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   },
@@ -80,5 +95,6 @@ export default {
     LINE_CHANNEL_ID,
     LINE_CHANNEL_SECRET,
     BASE_URL,
+    LOCAL_URL,
   },
 }
