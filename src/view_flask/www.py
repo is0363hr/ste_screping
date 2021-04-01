@@ -10,4 +10,4 @@ toolbar = DebugToolbarExtension(app)
 
 
 app.register_blueprint(index_page, url_prefix="/")
-app.register_blueprint(weather_api, url_prefix="/api/weather")
+app.register_blueprint(weather_api, url_prefix="/api")

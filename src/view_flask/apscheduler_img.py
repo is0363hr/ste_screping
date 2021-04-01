@@ -7,7 +7,7 @@ import os
 # 実行ディレクトリを上げる
 # import sys
 # sys.path.append("../")
-from modules import meteorological_img
+from modules.meteorological_img import meteoro_img_create
 from common.models.cloud import Cloud
 
 # セッション変数の取得
@@ -19,8 +19,11 @@ class Map_update:
         self.scheduler = BackgroundScheduler(standalone=True, coalesce=True)
         pass
 
-    def sche_set(self, set_time):
+    def sche_second_set(self, set_time):
         self.scheduler.add_job(self.insert_img, "interval", seconds=set_time)
+
+    def sche_minute_set(self, set_time):
+        self.scheduler.add_job(self.insert_img, "interval", minutes=set_time)
 
     def sche_start(self):
         self.scheduler.start()
@@ -40,16 +43,16 @@ class Map_update:
         return image_file
 
     def insert_img(self):
-        path, img_time = meteorological_img.main()
-        # image_file = self.img_io(path)
         now = datetime.now()
+        zoom = 4
+        path = meteoro_img_create(now, 135, 34, zoom)
         cloud = Cloud()
         cloud.img_name = os.path.basename(path)
         cloud.img_path = path
-        cloud.img_time = img_time
+        cloud.img_time = os.path.splitext(os.path.basename(path))[0]
         cloud.created_at = now
         cloud.tag = "synthetic"
-        cloud.zoom_level = 2
+        cloud.zoom_level = zoom
         session.add(cloud)
         session.commit()
         print(path)
@@ -59,7 +62,7 @@ class Map_update:
 def main():
     print("schedule start")
     map = Map_update()
-    map.sche_set(10)
+    map.sche_second_set(10)
     map.sche_start()
 
 

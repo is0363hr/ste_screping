@@ -2,7 +2,7 @@ from application import app, Base, ENGINE, manager
 from flask_script import Server, Command
 from www import *
 
-from apscheduler_img import python
+from apscheduler_img import Map_update
 
 # web server
 manager.add_command(
@@ -10,7 +10,7 @@ manager.add_command(
 )
 
 # map = Map_update()
-# map.sche_set(10)
+# map.sche_second_set(10)
 # map.sche_start()
 
 # create tables

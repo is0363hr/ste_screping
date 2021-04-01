@@ -5,27 +5,25 @@ from datetime import datetime, timedelta
 import os
 import cv2
 
-
-class meteorogical_img:
+class MeteImg:
     def __init__(
         self,
-        tag,
-        line_range_min,
-        line_range_max,
-        column_range_min,
-        column_range_max,
+        dateTime,
+        lon,
+        lat,
         zoom,
     ) -> None:
-        self.tag = tag
-        self.line_range_min = line_range_min
-        self.line_range_max = line_range_max
-        self.column_range_min = column_range_min
-        self.column_range_max = column_range_max
+        self.tag = ""
+        self.dateTime = dateTime
+        self.lon = lon
+        self.lat = lat
         self.zoom = zoom
+        self.column = 0
+        self.line = 0
+        self.get_time = ''
 
-        pass
 
-    def get_map_img(self):
+    def get_img(self):
         now = datetime.now()
         h = sum([int(s) for s in str(now.strftime("%H"))])
         m = int(now.strftime("%M")[-1])
@@ -35,28 +33,33 @@ class meteorogical_img:
             time[-4:-2] = "0" + str(h)
         else:
             time[-4:-2] = str(h)
-        time = "".join(time)
-        print(time)
+        time = "".join(time) + '00'
+        self.get_time = time
+        # print(time)
         # time = "202101060955"
         # self.img_time = temp_time.strftime("%Y年%m月%d日%H時%M分")
         self.img_time = temp_time
         if self.tag == "map":
             base_url = "https://cyberjapandata.gsi.go.jp/xyz/pale/"
         elif self.tag == "cloud":
-            base_url = "https://www.jma.go.jp/bosai/jmatile/data/nowc/20210225111500/none/20210225111500/surf/hrpns/"
-        for column in range(self.column_range_min, self.column_range_max + 1):
-            for line in range(self.line_range_min, self.line_range_max + 1):
+            base_url = ("https://www.jma.go.jp/bosai/jmatile/data/nowc/{}/none/{}/surf/hrpns/").format(time, time)
+
+        z, x, y = self.get_column_line()
+
+        for i in range(z):
+            for j in range(z):
                 url = (base_url + "{}/{}/{}.png").format(
                     self.zoom,
-                    column,
-                    line,
+                    x+i,
+                    y+j,
                 )
-                output_path = ("./img/{}/{}/{}_{}.png").format(
-                    self.tag, self.zoom, column, line
+                output_path = (SAVE_DIR+"/{}/{}/{}_{}.png").format(
+                    self.tag, self.zoom, x+i, y+j
                 )
                 dir = os.path.dirname(output_path) + "/"
                 os.makedirs(os.path.dirname(output_path), exist_ok=True)
                 self.save_img(url, output_path)
+                # print(url)
         return dir
 
     # 指定したURLの画像を保存
@@ -73,34 +76,35 @@ class meteorogical_img:
 
     # 画像結合
     def img_connect(self, path):
-        flag = False
-        if self.tag == "cloud":
-            flag = True
+        z, x, y = self.get_column_line()
         v_list = []
-        for i in range(self.column_range_min, self.column_range_max + 1):
-            file = path + str(i) + "_" + str(self.line_range_min) + ".png"
-            if flag:
-                base_img = cv2.imread(file, -1)
-            else:
-                base_img = cv2.imread(file)
-            for j in range(self.line_range_min + 1, self.line_range_max + 1):
-                file = path + str(i) + "_" + str(j) + ".png"
-                if flag:
-                    im = cv2.imread(file, -1)
-                else:
-                    im = cv2.imread(file)
-                base_img = cv2.vconcat([base_img, im])
+        for i in range(z):
+            for j in range(z):
+                file = path + str(x+i) + "_" + str(y+j) + ".png"
+                if not (j==0):
+                    if self.tag == "cloud":
+                        im = cv2.imread(file, -1)
+                    else:
+                        im = cv2.imread(file)
+                    base_img = cv2.vconcat([base_img, im])
+                elif j==0:
+                    if self.tag == "cloud":
+                        base_img = cv2.imread(file, -1)
+                    else:
+                        base_img = cv2.imread(file)
             v_list.append(base_img)
         base_img = v_list[0]
         for v in v_list[1:]:
             base_img = cv2.hconcat([base_img, v])
 
-        cv2.imwrite(path + "result.png", base_img)
+        output_path = path + "result.png"
+        cv2.imwrite(output_path, base_img)
+        return output_path
 
     # 透過画像の合成
     def sye(self):
         cartopy = False
-        base_path = "./img"
+        base_path = SAVE_DIR
         if cartopy:
             map = "cartopy/"
         else:
@@ -117,29 +121,53 @@ class meteorogical_img:
         map[y1:y2, x1:x2] = map[y1:y2, x1:x2] * (1 - cloud[:, :, 3:] / 255) + cloud[
             :, :, :3
         ] * (cloud[:, :, 3:] / 255)
-        output_path = ("{}/{}/{}/result.png").format(base_path, "sye", self.zoom)
+        output_path = ("{}/{}/{}/{}.png").format(base_path, "sye", self.zoom, self.get_time)
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         cv2.imwrite(output_path, map)
         return output_path
 
 
-def main():
-    zoom = 5
-    # /column_line/
-    column_range_min = 27
-    column_range_max = 29
-    line_range_min = 11
-    line_range_max = 14
-    tag = "map"
-    meteoro = meteorogical_img(
-        tag, line_range_min, line_range_max, column_range_min, column_range_max, zoom
+    def get_column_line(self):
+        self.line = LINE_INITIALIZE_NUMBER
+        self.column = COLUMN_INITIALIZE_NUMBER
+        zoom_range = self.zoom - ZOOM_INITIALIZE + 1
+        return zoom_range+1, zoom_range*self.line, zoom_range*self.column
+
+
+    def map_create(self):
+        self.tag = "map"
+        path = self.get_img()
+        self.img_connect(path)
+        return
+
+
+    def cloud_create(self):
+        self.tag = "cloud"
+        path = self.get_img()
+        self.img_connect(path)
+        return self.sye()
+
+
+def meteoro_img_create(dateTime, lon, lat, zoom):
+    meteoro = MeteImg(
+        dateTime, lon, lat, zoom
     )
-    path = meteoro.get_map_img()
-    meteoro.img_connect(path)
-    meteoro.sye()
+    meteoro.map_create()
+    return meteoro.cloud_create()
+
+# 日本地図の初期位置
+ZOOM_INITIALIZE  = 4
+LINE_INITIALIZE_NUMBER = 13
+COLUMN_INITIALIZE_NUMBER = 5
+SAVE_DIR = './static'
+
+
+def main():
+    zoom = 4
+    now = datetime.now()
+    path = meteoro_img_create(now, 135, 34, zoom)
+    print(path)
 
 
 if __name__ == "__main__":
     main()
-
-    pass
