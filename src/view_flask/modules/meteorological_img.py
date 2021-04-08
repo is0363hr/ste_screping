@@ -1,5 +1,5 @@
 # 気象庁画像取得（2021/3/11）
-
+from meteorological_img import LinePush
 import requests
 from datetime import datetime, timedelta
 import os
@@ -69,8 +69,10 @@ class MeteImg:
             with open(output_path, "wb") as w:
                 w.write(req.content)
                 w.close()
-        except requests.exceptions.HTTPError:
+        except requests.exceptions.HTTPError as request_error:
             print("{}へのアクセス失敗".format(url))
+            line_push = LinePush()
+            line_push.push_scraping_error(request_error)
         except Exception as e:
             print(e)
 
