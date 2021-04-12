@@ -1,9 +1,16 @@
 # 気象庁画像取得（2021/3/11）
-from meteorological_img import LinePush
+from flask.app import Flask
+from modules.line_api import LinePush
 import requests
 from datetime import datetime, timedelta
 import os
 import cv2
+
+
+def strToDate(year, month, day, hour, minute):
+    tstr = year + month + day + hour + minute
+    tdate = datetime.strptime(tstr, '%Y%m%d%H%M')
+    return tdate
 
 class MeteImg:
     def __init__(
@@ -23,11 +30,15 @@ class MeteImg:
         self.get_time = ''
 
 
-    def get_img(self):
-        now = datetime.now()
-        h = sum([int(s) for s in str(now.strftime("%H"))])
-        m = int(now.strftime("%M")[-1])
-        temp_time = datetime.now() - timedelta(minutes=5 + m % 5)
+
+    def get_img(self, datetime_set=False):
+        if not datetime_set:
+            date_data = datetime.now()
+        else:
+            date_data = self.dateTime
+        h = sum([int(s) for s in str(date_data.strftime("%H"))])
+        m = int(date_data.strftime("%M")[-1])
+        temp_time = date_data - timedelta(minutes=5 + m % 5)
         time = list(temp_time.strftime("%Y%m%d%H%M"))
         if h < 10:
             time[-4:-2] = "0" + str(h)
@@ -59,7 +70,7 @@ class MeteImg:
                 dir = os.path.dirname(output_path) + "/"
                 os.makedirs(os.path.dirname(output_path), exist_ok=True)
                 self.save_img(url, output_path)
-                # print(url)
+                print(url)
         return dir
 
     # 指定したURLの画像を保存
@@ -143,9 +154,9 @@ class MeteImg:
         return
 
 
-    def cloud_create(self):
+    def cloud_create(self, datetime_set=False):
         self.tag = "cloud"
-        path = self.get_img()
+        path = self.get_img(datetime_set)
         self.img_connect(path)
         return self.sye()
 
@@ -167,8 +178,20 @@ SAVE_DIR = './static'
 def main():
     zoom = 4
     now = datetime.now()
-    path = meteoro_img_create(now, 135, 34, zoom)
-    print(path)
+    now = strToDate(
+        '2021',
+        '4',
+        '10',
+        '22',
+        '35'
+    )
+    mimg = MeteImg(
+        now,
+        '34',
+        '135',
+        4,
+    )
+    print(mimg.cloud_create(True))
 
 
 if __name__ == "__main__":

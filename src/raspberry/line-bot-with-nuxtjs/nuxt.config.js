@@ -3,6 +3,7 @@ import colors from 'vuetify/es5/util/colors'
 const { LINE_CHANNEL_ID } = process.env.LINE_CHANNEL_ID
 const { LINE_CHANNEL_SECRET } = process.env.LINE_CHANNEL_SECRET
 const { BASE_URL } = process.env.BASE_URL
+const { BASE_LOCAL_TEST_URL } = process.env.BASE_LOCAL_TEST_URL
 const { LOCAL_URL } = process.env.LOCAL_URL
 
 export default {
@@ -95,6 +96,7 @@ export default {
     LINE_CHANNEL_ID,
     LINE_CHANNEL_SECRET,
     BASE_URL,
+    BASE_LOCAL_TEST_URL,
     LOCAL_URL,
   },
 }

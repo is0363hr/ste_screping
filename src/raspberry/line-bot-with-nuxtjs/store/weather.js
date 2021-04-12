@@ -35,7 +35,7 @@ export const mutations = {
 }
 
 export const actions = {
-  weatherImg({ commit }, requestData) {
+  weatherImg({ commit, state }, requestData) {
     // commit('updateDateTime', requestData),
     axios
       .get(
@@ -46,8 +46,10 @@ export const actions = {
             imgMonth: requestData.imgMonth,
             imgDay: requestData.imgDay,
             imgHour: requestData.imgHour,
+            imgMinute: requestData.imgMinute,
             lon: requestData.lon,
             lat: requestData.lat,
+            zoom: state.zoom,
           }
         })
       .then((response) => {
