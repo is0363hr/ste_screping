@@ -3,13 +3,14 @@
     <HomeHeader></HomeHeader>
     <div class="home-body">
       <v-img width=100%
-        :src="imgSrc()"
-        alt="/static/4/20210401101500.png"
+        :src="'data:image/png;base64,'+imgData"
       >
       </v-img>
+      <!-- <img v-bind:src="'data:image/png;base64,'+weatherImgData" /> -->
       <div class="img-bar">
         <HomeBody></HomeBody>
       </div>
+      <!-- <div>{{ imgData }}</div> -->
     </div>
   </v-row>
 </template>
@@ -17,7 +18,7 @@
 <script>
 import HomeHeader from '~/components/HomeHeader.vue'
 import HomeBody from '~/components/HomeBody.vue'
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -26,26 +27,14 @@ export default {
   },
   data() {
     return{
-      weatherImgData: "/static/4/20210401101500.png"
     }
   },
   computed: {
-    ...mapGetters('weather', ['imgPath']),
-    getImgPath() {
-      this.imgPath({
-        imgPath: this.imgPath,
-      })
-      this.imgPath = null
-    }
+    ...mapState('weather', ['imgData'])
+  },
+  mounted () {
   },
   methods: {
-    ...mapGetters('weather', ['imgData']),
-    imgSrc(){
-      this.imgData({
-        weatherImgData: this.imgData,
-      })
-      this.weatherImgData = "/static/4/20210401101500.png"
-    }
   }
 }
 </script>

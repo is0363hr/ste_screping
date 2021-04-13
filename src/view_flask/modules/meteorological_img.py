@@ -5,12 +5,20 @@ import requests
 from datetime import datetime, timedelta
 import os
 import cv2
+import base64
 
 
 def strToDate(year, month, day, hour, minute):
     tstr = year + month + day + hour + minute
     tdate = datetime.strptime(tstr, '%Y%m%d%H%M')
     return tdate
+
+
+def image_file_to_base64(file_path):
+    with open(file_path, "rb") as image_file:
+        data = base64.b64encode(image_file.read())
+    return data.decode('utf-8')
+
 
 class MeteImg:
     def __init__(

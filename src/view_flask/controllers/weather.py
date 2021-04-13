@@ -1,8 +1,7 @@
-import io
-from PIL import Image
 from flask import Blueprint, jsonify, make_response, request, abort
 from flask.wrappers import Response
-from modules.meteorological_img import MeteImg, strToDate
+from modules.meteorological_img import MeteImg, strToDate, image_file_to_base64
+from apscheduler_img import Map_update
 
 
 isDebug = True
@@ -31,26 +30,25 @@ def get_weather():
                 date_data,
                 data['lon'],
                 data['lat'],
-                data['zoom'],
+                int(data['zoom']),
             )
             img_path = mimg.cloud_create(True)
             print(img_path)
-            img = Image.open(img_path, mode='r')
+            img_bytes = image_file_to_base64(img_path)
 
-            img_bytes = io.BytesIO()
-            img.save(img_bytes, format='PNG')
-            img_bytes = img_bytes.getvalue()
+            map_update = Map_update()
+            map_update.request_insert_img(date_data, int(data['zoom']), img_path)
 
-            # response = {}
-            # for d in data:
-            #     response.setdefault('res', 'param is : ' + d)
             response = make_response(img_bytes)
-            response.headers.set('Content-Type', 'image/png')
+            response.headers.set('Content-Type', 'text/plain')
             return response
         elif request.method == 'POST':
             print('POST')
-            print(request.form['query'])
-            return request.form['query']
+            # print(request.form['query'])
+            # return request.form['query']
+            response = {}
+            response.headers.set('Content-Type', 'application/json')
+            return make_response(jsonify(response))
         else:
             return abort(400)
     except Exception as e:

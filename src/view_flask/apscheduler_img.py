@@ -20,10 +20,10 @@ class Map_update:
         pass
 
     def sche_second_set(self, set_time):
-        self.scheduler.add_job(self.insert_img, "interval", seconds=set_time)
+        self.scheduler.add_job(self.regular_insert_img, "interval", seconds=set_time)
 
     def sche_minute_set(self, set_time):
-        self.scheduler.add_job(self.insert_img, "interval", minutes=set_time)
+        self.scheduler.add_job(self.regular_insert_img, "interval", minutes=set_time)
 
     def sche_start(self):
         self.scheduler.start()
@@ -42,7 +42,7 @@ class Map_update:
         image_file = image_data.read()
         return image_file
 
-    def insert_img(self):
+    def regular_insert_img(self):
         now = datetime.now()
         zoom = 4
         path = meteoro_img_create(now, 135, 34, zoom)
@@ -56,7 +56,20 @@ class Map_update:
         session.add(cloud)
         session.commit()
         print(path)
-        print("insert")
+        print("regular_insert")
+
+    def request_insert_img(self, request_datetime, zoom, path):
+        cloud = Cloud()
+        cloud.img_name = os.path.basename(path)
+        cloud.img_path = path
+        cloud.img_time = os.path.splitext(os.path.basename(path))[0]
+        cloud.created_at = request_datetime
+        cloud.tag = "synthetic"
+        cloud.zoom_level = zoom
+        session.add(cloud)
+        session.commit()
+        print(path)
+        print("request_insert")
 
 
 def main():
