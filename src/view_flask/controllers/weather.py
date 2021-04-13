@@ -34,6 +34,7 @@ def get_weather():
                 data['zoom'],
             )
             img_path = mimg.cloud_create(True)
+            print(img_path)
             img = Image.open(img_path, mode='r')
 
             img_bytes = io.BytesIO()

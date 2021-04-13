@@ -64,7 +64,11 @@ export default {
         target: `${process.env.BASE_URL}/api`,
         pathRewrite: {
             '^/api': '/'
-        }
+        },
+        target: `${process.env.BASE_LOCAL_TEST_URL}/api`,
+        pathRewrite: {
+            '^/api': '/'
+        },
     }
   },
 

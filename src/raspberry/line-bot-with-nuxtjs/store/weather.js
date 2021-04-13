@@ -1,5 +1,6 @@
 // export const namespaced = true
 import axios from '~/middleware/axios-weather-create'
+// import fs from 'fs'
 // import axios from 'axios'
 
 export const state = () => ({
@@ -12,6 +13,7 @@ export const state = () => ({
   lon: 135.000,
   lat: 34.000,
   imgPath: null,
+  imgData: null,
 })
 
 export const mutations = {
@@ -31,6 +33,9 @@ export const mutations = {
   },
   updateImagePath(state, imgPath) {
     state.imgPath = imgPath
+  },
+  updateImageData(state, imgData) {
+    state.imgData = imgData
   },
 }
 
@@ -53,7 +58,7 @@ export const actions = {
           }
         })
       .then((response) => {
-        commit('updateImagePath', response.data.imgPath)
+        commit('updateImageData', response.data)
         console.log(response)
       })
   },
@@ -71,5 +76,8 @@ export const getters = {
   },
   imgPath(state) {
     return state.imgPath
+  },
+  imgData(state) {
+    return state.imgData
   },
 }

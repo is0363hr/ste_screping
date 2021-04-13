@@ -3,7 +3,8 @@
     <HomeHeader></HomeHeader>
     <div class="home-body">
       <v-img width=100%
-        src='zoom2/202102231025.png'
+        :src="imgSrc()"
+        alt="/static/4/20210401101500.png"
       >
       </v-img>
       <div class="img-bar">
@@ -23,6 +24,11 @@ export default {
     HomeHeader,
     HomeBody,
   },
+  data() {
+    return{
+      weatherImgData: "/static/4/20210401101500.png"
+    }
+  },
   computed: {
     ...mapGetters('weather', ['imgPath']),
     getImgPath() {
@@ -30,6 +36,15 @@ export default {
         imgPath: this.imgPath,
       })
       this.imgPath = null
+    }
+  },
+  methods: {
+    ...mapGetters('weather', ['imgData']),
+    imgSrc(){
+      this.imgData({
+        weatherImgData: this.imgData,
+      })
+      this.weatherImgData = "/static/4/20210401101500.png"
     }
   }
 }
