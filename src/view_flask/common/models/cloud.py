@@ -7,7 +7,8 @@ class Cloud(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     img_name = Column(String(100), nullable=False)
-    img_path = Column(String(50), nullable=False)
+    img_cloud_path = Column(String(50), nullable=False)
+    img_sye_path = Column(String(50), nullable=False)
     img_time = Column(DateTime, nullable=False)
     created_at = Column(DateTime, nullable=False)
     tag = Column(String(50), nullable=False)

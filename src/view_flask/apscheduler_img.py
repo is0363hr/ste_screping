@@ -45,17 +45,18 @@ class Map_update:
     def regular_insert_img(self):
         now = datetime.now()
         zoom = 4
-        path = meteoro_img_create(now, 135, 34, zoom)
+        cloud_path, sye_path = meteoro_img_create(now, 135, 34, zoom)
         cloud = Cloud()
-        cloud.img_name = os.path.basename(path)
-        cloud.img_path = path
-        cloud.img_time = os.path.splitext(os.path.basename(path))[0]
+        cloud.img_name = os.path.basename(cloud_path)
+        cloud.img_cloud_path = cloud_path
+        cloud.img_sye_path = sye_path
+        cloud.img_time = os.path.splitext(os.path.basename(cloud_path))[0]
         cloud.created_at = now
         cloud.tag = "synthetic"
         cloud.zoom_level = zoom
         session.add(cloud)
         session.commit()
-        print(path)
+        print(cloud_path)
         print("regular_insert")
 
     def request_insert_img(self, request_datetime, zoom, path):

@@ -34,7 +34,8 @@ class DBFunc:
                 {
                     "id": cloud.id,
                     "img_name": cloud.img_name,
-                    "img_path": cloud.img_path,
+                    "img_cloud_path": cloud.img_cloud_path,
+                    "img_sye_path": cloud.img_sye_path,
                     "created_at": cloud.created_at,
                     "tag": cloud.tag,
                     "zoom_level": cloud.zoom_level,

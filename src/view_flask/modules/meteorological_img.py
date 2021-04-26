@@ -118,12 +118,12 @@ class MeteImg:
         for v in v_list[1:]:
             base_img = cv2.hconcat([base_img, v])
 
-        output_path = path + "result.png"
+        output_path = path + self.get_time + ".png"
         cv2.imwrite(output_path, base_img)
         return output_path
 
     # 透過画像の合成
-    def sye(self):
+    def sye(self, cloud_path):
         cartopy = False
         base_path = SAVE_DIR
         if cartopy:
@@ -131,7 +131,7 @@ class MeteImg:
         else:
             map = "map/"
         map_path = ("{}/{}/{}/result.png").format(base_path, "map", self.zoom)
-        cloud_path = ("{}/{}/{}/result.png").format(base_path, "cloud", self.zoom)
+        # cloud_path = ("{}/{}/{}/{}.png").format(base_path, "cloud", self.zoom, self.get_time)
         map = cv2.imread(map_path)
         # height, width = map.shape[0], map.shape[1]
         # map = cv2.resize(map, (512, 512))
@@ -165,8 +165,9 @@ class MeteImg:
     def cloud_create(self, datetime_set=False):
         self.tag = "cloud"
         path = self.get_img(datetime_set)
-        self.img_connect(path)
-        return self.sye()
+        cloud_path = self.img_connect(path)
+        sye_path = self.sye(cloud_path)
+        return cloud_path, sye_path
 
 
 def meteoro_img_create(dateTime, lon, lat, zoom):

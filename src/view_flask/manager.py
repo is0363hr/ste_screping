@@ -9,9 +9,9 @@ manager.add_command(
     "runserver", Server(host="0.0.0.0", use_debugger=True, use_reloader=True)
 )
 
-map = Map_update()
-map.sche_second_set(10)
-map.sche_start()
+# map = Map_update()
+# map.sche_second_set(10)
+# map.sche_start()
 
 # create tables
 @Command
