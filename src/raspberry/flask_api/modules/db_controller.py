@@ -43,6 +43,15 @@ class DBFunc:
             )
         return data
 
+    def get_today(self):
+        now = datetime.date()
+        clouds = session.query(Cloud).\
+            filter(Cloud.created_at >= now).\
+                all()
+
+        return clouds
+
+
 
 def main():
     db = DBFunc()
