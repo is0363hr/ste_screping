@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy.sql import func
 from pprint import pprint
-from datetime import datetime
+from datetime import datetime, date
 
 from common.models.cloud import Cloud
 from application import session
@@ -43,10 +43,19 @@ class DBFunc:
             )
         return data
 
+    def get_today(self):
+        now = date.today()
+        print(now)
+        clouds = session.query(Cloud).\
+            filter(Cloud.created_at >= now).\
+                all()
+
+        return clouds
+
 
 def main():
     db = DBFunc()
-    pprint(db.get_all())
+    pprint(db.get_today())
     pass
 
 

@@ -93,6 +93,7 @@ class MeteImg:
             line_push = LinePush()
             line_push.push_scraping_error(request_error)
         except Exception as e:
+            print("アクセス失敗")
             print(e)
 
     # 画像結合
