@@ -75,7 +75,7 @@ class MeteImg:
                 output_path = (SAVE_DIR+"/{}/{}/{}_{}.png").format(
                     self.tag, self.zoom, x+i, y+j
                 )
-                dir = os.path.dirname(output_path) + "/" + str(date_data.strftime("%m_%d")) + "/"
+                dir = os.path.dirname(output_path) + "/" + str(date_data.strftime("%Y_%m_%d")) + "/"
                 os.makedirs(os.path.dirname(output_path), exist_ok=True)
                 self.save_img(url, output_path)
                 print(url)
@@ -143,7 +143,7 @@ class MeteImg:
         map[y1:y2, x1:x2] = map[y1:y2, x1:x2] * (1 - cloud[:, :, 3:] / 255) + cloud[
             :, :, :3
         ] * (cloud[:, :, 3:] / 255)
-        output_path = ("{}/{}/{}/{}/{}.png").format(base_path, "sye", self.zoom, str(self.dateTime.strftime("%m_%d")), self.get_time)
+        output_path = ("{}/{}/{}/{}/{}.png").format(base_path, "sye", self.zoom, str(self.dateTime.strftime("%Y_%m_%d")), self.get_time)
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         cv2.imwrite(output_path, map)
         return output_path

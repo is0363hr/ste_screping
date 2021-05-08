@@ -75,7 +75,7 @@ class MeteImg:
                 output_path = (SAVE_DIR+"/{}/{}/{}_{}.png").format(
                     self.tag, self.zoom, x+i, y+j
                 )
-                dir = os.path.dirname(output_path) + "/"
+                dir = os.path.dirname(output_path) + "/"+ str(date_data.strftime("%Y_%m_%d")) + "/"
                 os.makedirs(os.path.dirname(output_path), exist_ok=True)
                 self.save_img(url, output_path)
                 print(url)
@@ -93,6 +93,9 @@ class MeteImg:
             line_push = LinePush()
             line_push.push_scraping_error(request_error)
         except Exception as e:
+            print("アクセス失敗!!!")
+            line_push = LinePush()
+            line_push.push_scraping_error(e)
             print(e)
 
     # 画像結合

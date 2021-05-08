@@ -2,6 +2,7 @@ from linebot import LineBotApi
 from linebot.models import TextSendMessage
 
 from config.line_setting import LINE_CHANNEL_SECRET, LINE_CHANNEL_ACCESS_TOKEN, USER_ID
+from modules.db_controller import DBFunc
 # from modules.selenium_weather import Weather
 
 class LinePush:
@@ -18,12 +19,18 @@ class LinePush:
     #         self.line_bot_api.push_message(USER_ID, messages=messages)
 
     def push_scraping_error(self, error):
-        messages = TextSendMessage(error)
-        self.line_bot_api.push_message(USER_ID, messages=messages)
+        m = 'スクレイピングに失敗しました。'
+        messages1 = TextSendMessage(m)
+        self.line_bot_api.push_message(USER_ID, messages=messages1)
+        messages2 = TextSendMessage(str(error))
+        self.line_bot_api.push_message(USER_ID, messages=messages2)
 
 
     def push_scraping_today(self):
-        pass
+        db_func = DBFunc()
+        count = len(db_func.get_today())
+        messages = TextSendMessage("スクレイピング実行回数：{}回".format(count))
+        self.line_bot_api.push_message(USER_ID, messages=messages)
 
 def main():
     line_push = LinePush()
