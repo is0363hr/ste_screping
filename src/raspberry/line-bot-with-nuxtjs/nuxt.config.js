@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 
 const { LINE_CHANNEL_ID } = process.env.LINE_CHANNEL_ID
 const { LINE_CHANNEL_SECRET } = process.env.LINE_CHANNEL_SECRET
-const { BASE_URL } = process.env.BASE_URL
+const { RASPBERRYPI_URL } = process.env.RASPBERRYPI_URL
 const { BASE_LOCAL_TEST_URL } = process.env.BASE_LOCAL_TEST_URL
 const { LOCAL_URL } = process.env.LOCAL_URL
 
@@ -60,15 +60,15 @@ export default {
   },
 
   proxy: {
-    '/api/': {
-        target: `${process.env.BASE_URL}/api`,
+    '/api/weather': {
+        target: `${process.env.RASPBERRYPI_URL}/api`,
         pathRewrite: {
-            '^/api': '/'
+            '^/api/weather': '/'
         },
-        target: `${process.env.BASE_LOCAL_TEST_URL}/api`,
-        pathRewrite: {
-            '^/api': '/'
-        },
+        // target: `${process.env.BASE_LOCAL_TEST_URL}/api`,
+        // pathRewrite: {
+        //     '^/api': '/'
+        // },
     }
   },
 
@@ -95,11 +95,16 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    extend (config, ctx) {
+      config.node = {
+        fs: "empty"
+      }
+    }
   },
   env: {
     LINE_CHANNEL_ID,
     LINE_CHANNEL_SECRET,
-    BASE_URL,
+    RASPBERRYPI_URL,
     BASE_LOCAL_TEST_URL,
     LOCAL_URL,
   },

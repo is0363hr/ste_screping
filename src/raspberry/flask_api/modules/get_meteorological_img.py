@@ -28,7 +28,6 @@ class MeteImg:
         self.y = None
 
 
-
     # 2021/04/01/13/57/00 -> 20210401045500
     def convert_time(self, date_data):
         h = sum([int(s) for s in str(date_data.strftime("%H"))])
@@ -106,7 +105,7 @@ class MeteImg:
 SAVE_BASE_DIR = './static/'
 MAP_IMAGE_URL = "https://cyberjapandata.gsi.go.jp/xyz/pale/"
 CLOUD_IMAGE_BASE_URL = "https://www.jma.go.jp/bosai/jmatile/data/nowc/"
-# ----------------
+# ----------------------
 
 
 def main():

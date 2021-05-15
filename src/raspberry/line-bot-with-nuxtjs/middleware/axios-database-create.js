@@ -1,20 +1,11 @@
-const express = require('express')
-const app = express()
-const router = express.Router()
-const bodyParser = require('body-parser')
+import axios from 'axios'
 
-// まずはルーティングのみ追加
-router.post(
-  '/webhook',
-  // 署名検証のためテキストでパース
-  bodyParser.text({ type: 'application/json' }),
-  require('./routes/webhook')
-)
+const instance = axios.create({
+  baseURL: `${process.env.LOCAL_URL}/api`,
+})
 
-// databaseの接続
-router.get('/database', (req, res, next) => {
-  // const mysql = require('mysql');
-  const mysql = require('promise-mysql');
+axios.get('/database', (req, res, next) => {
+  const mysql = require('mysql');
   const connection = mysql.createConnection({
     // host : `${process.env.LOCAL_URL}/api`,
     host : '192.168.100.66',
@@ -40,4 +31,4 @@ router.get('/database', (req, res, next) => {
   connection.end();
 })
 
-module.exports = router
+export default instance
