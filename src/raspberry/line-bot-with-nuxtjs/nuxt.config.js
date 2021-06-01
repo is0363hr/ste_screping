@@ -5,6 +5,7 @@ const { LINE_CHANNEL_SECRET } = process.env.LINE_CHANNEL_SECRET
 const { RASPBERRYPI_URL } = process.env.RASPBERRYPI_URL
 const { BASE_LOCAL_TEST_URL } = process.env.BASE_LOCAL_TEST_URL
 const { LOCAL_URL } = process.env.LOCAL_URL
+const { MYSQL_HOST_ADDRESS } = process.env.MYSQL_HOST_ADDRESS
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -107,5 +108,6 @@ export default {
     RASPBERRYPI_URL,
     BASE_LOCAL_TEST_URL,
     LOCAL_URL,
+    MYSQL_HOST_ADDRESS,
   },
 }

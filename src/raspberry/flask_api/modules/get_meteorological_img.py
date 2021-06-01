@@ -6,10 +6,11 @@ import os
 import cv2
 import base64
 import time
-
+import os
 
 from modules.line_api import LinePush
 from config.map_param import ZOOM_SCOP
+from modules.db_controller import DBFunc
 
 
 def image_file_to_base64(file_path):
@@ -26,6 +27,7 @@ class MeteImg:
         self.zoom = None
         self.x = None
         self.y = None
+        self.db_func = DBFunc()
 
 
     # 2021/04/01/13/57/00 -> 20210401045500
@@ -70,7 +72,7 @@ class MeteImg:
             url = self.create_cloud_img_url()
 
         output_path = self.create_save_img_path()
-        print(os.path.basename(output_path))
+        # print(os.path.basename(output_path))
         try:
             req = requests.get(url)
             with open(output_path, "wb") as w:
@@ -85,20 +87,31 @@ class MeteImg:
             line_push = LinePush()
             line_push.push_scraping_error(e)
             print(e)
+        return output_path
 
 
     def bulk_get_img(self, tag, on_time, forecast_time):
         self.tag = tag
         self.on_time = on_time
         self.forecast_time = forecast_time
+        data_list = []
         for zoom_temp in ZOOM_SCOP:
             for x in range(zoom_temp['X_INITIALIZE_MIN'], zoom_temp['X_INITIALIZE_MAX']+1):
                 for y in range(zoom_temp['Y_INITIALIZE_MIN'], zoom_temp['Y_INITIALIZE_MAX']+1):
                     self.zoom = zoom_temp['ZOOM']
                     self.x = x
                     self.y = y
-                    self.get_img()
+                    img_path = self.get_img()
+                    data_list.append({
+                        'img_path': img_path,
+                        'img_time': forecast_time,
+                        'created_at': on_time,
+                        'tag': tag,
+                        'zoom_level': self.zoom,
+                    })
                     time.sleep(1)
+        self.db_func.bulk_insert_data(data_list)
+        return
 
 
 # const ----------------
