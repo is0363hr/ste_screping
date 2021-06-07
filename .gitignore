@@ -5,3 +5,7 @@ src/view_flask/.env
 src/view_flask/config/.env
 src/view_flask/config/line_setting.py
 src/view_flask/config/__pycache__/line_setting.cpython-37.pyc
+*.icloud
+*.pyc
+*/config/*
+*/__pycache__/*
