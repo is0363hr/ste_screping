@@ -34,7 +34,8 @@ class LinePush:
 
 def main():
     line_push = LinePush()
-    line_push.push_scraping_error()
+    # line_push.push_scraping_error()
+    line_push.push_scraping_today()
     pass
 
 
