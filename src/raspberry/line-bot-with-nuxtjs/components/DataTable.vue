@@ -17,19 +17,11 @@
               class="mx-4"
             ></v-text-field>
           </template>
-          <!-- <template v-slot:body.append>
-            <tr>
-              <td></td>
-              <td>
-                <v-text-field
-                  v-model="calories"
-                  type="number"
-                  label="Less than"
-                ></v-text-field>
-              </td>
-              <td colspan="4"></td>
-            </tr>
-          </template> -->
+          <!-- ウェブサイトの項目をリンクにします。 -->
+          <template #item.name="{ item }">
+            <!-- <nuxt-link :to="`Image?imagePath=${item.path}`" @click.native="updatePath(item.path)">{{ item.name }}</nuxt-link> -->
+            <nuxt-link to="Image" @click.native="updatePath(item.path)">{{ item.name }}</nuxt-link>
+          </template>
         </v-data-table>
       </div>
     </v-app>
@@ -37,6 +29,7 @@
 </template>
 
 <script>
+import { mapActions, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -57,25 +50,30 @@ export default {
         {
           text: 'ImageName',
           value: 'name',
-          // filter: value => {
-          //   if (!this.calories) return true
-
-          //   return value < parseInt(this.calories)
-          // },
         },
-        // { text: 'Fat (g)', value: 'fat' },
-        // { text: 'Carbs (g)', value: 'carbs' },
-        // { text: 'Protein (g)', value: 'protein' },
-        // { text: 'Iron (%)', value: 'iron' },
+        {
+          text: 'CreatedAt',
+          value: 'createdAt',
+        },
+        {
+          text: 'ZoomLevel',
+          value: 'zoomLevel',
+        },
       ]
     },
   },
   methods: {
+    ...mapMutations('image', ['updateImagePath']),
+    ...mapActions('image', ['requestImg']),
     filterOnlyCapsText (value, search, item) {
       return value != null &&
         search != null &&
         typeof value === 'string' &&
         value.toString().toLocaleUpperCase().indexOf(search) !== -1
+    },
+    updatePath (path){
+      this.updateImagePath(path)
+      this.requestImg()
     },
   },
   mounted: function() {

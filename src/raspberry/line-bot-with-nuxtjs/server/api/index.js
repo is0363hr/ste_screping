@@ -16,8 +16,7 @@ router.post(
 router.get('/database', (req, res, next) => {
   // const mysql = require('promise-mysql');
   const connection = mysql.createConnection({
-    // host : `${process.env.MYSQL_HOST_ADDRESS}`,
-    host : '192.168.100.66',
+    host : `${process.env.MYSQL_HOST_ADDRESS}`,
     user : 'test_mac',
     port : "3306",
     password: 'InfoNetworking',
@@ -38,7 +37,7 @@ router.get('/database', (req, res, next) => {
     }
     var dat = [];
     for (var i = 0;i < row.length; i++) {
-      dat.push({id: row[i].id, name: row[i].img_name});
+      dat.push({id: row[i].id, name: row[i].img_name, createdAt: row[i].created_at, zoomLevel: row[i].zoom_level, path: row[i].img_cloud_path});
     }
     ret = JSON.stringify(dat);
     res.header('Content-Type', 'application/json; charset=utf-8')

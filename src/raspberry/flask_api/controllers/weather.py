@@ -53,3 +53,27 @@ def get_weather():
             return abort(400)
     except Exception as e:
         return str(e)
+
+
+@weather_api.route("/image", methods=['GET', 'POST'])
+def get_weather():
+    data = {}
+    params = ['path']
+    try:
+        if request.method == 'GET':
+            print('GET')
+            for param in params:
+                data.update({
+                    param: request.args.get(param, '')
+                })
+        elif request.method == 'POST':
+            print('POST')
+            # print(request.form['query'])
+            # return request.form['query']
+            response = {}
+            response.headers.set('Content-Type', 'application/json')
+            return make_response(jsonify(response))
+        else:
+            return abort(400)
+    except Exception as e:
+        return str(e)

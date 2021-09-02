@@ -66,11 +66,13 @@ export default {
         pathRewrite: {
             '^/api/weather': '/'
         },
-        // target: `${process.env.BASE_LOCAL_TEST_URL}/api`,
-        // pathRewrite: {
-        //     '^/api': '/'
-        // },
-    }
+    },
+    '/api/image': {
+      target: `${process.env.RASPBERRYPI_URL}/api`,
+      pathRewrite: {
+          '^/api/image': '/'
+      },
+    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
