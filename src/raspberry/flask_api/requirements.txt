@@ -1,3 +1,8 @@
 line-bot-sdk==1.19.0
 Flask==1.1.2
 gunicorn==19.6.0
+sqlalchemy
+pprint
+glob
+python-openv
+apscheduler
